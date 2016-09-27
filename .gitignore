@@ -10,6 +10,7 @@ src/style/material-ui
 # Logs
 logs
 *.log
+npm-debug.log*
 
 # Runtime data
 pids
@@ -21,3 +22,4 @@ pids
 node_modules
 
 .idea
+.npm
