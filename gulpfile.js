@@ -114,7 +114,7 @@ gulp.task('test', function() {
         userAgent: 'node.js'
     };
 
-    return gulp.src(['test/**/*-spec.js'], {read:false})
+    return gulp.src(['app/scripts/**/*-spec.js'], {read:false})
         .pipe(mocha({
             reporter: 'spec',
             globals: {
@@ -124,7 +124,7 @@ gulp.task('test', function() {
                 shallow: enzyme.shallow
             }
         }))
-})
+});
 
 
 // HTML
@@ -231,8 +231,6 @@ gulp.task('watch', ['html', 'fonts', 'bundle'], function() {
     gulp.watch('app/*.html', ['html']);
 
     gulp.watch(['app/styles/**/*.less', 'app/styles/**/*.css'], ['styles', 'scripts', reload]);
-
-
 
     // Watch image files
     gulp.watch('app/images/**/*', reload);
