@@ -1,5 +1,5 @@
 # Build directory
-build
+dist
 
 # Copied styles for Material UI
 src/style/material-ui
@@ -20,6 +20,8 @@ pids
 # Dependency directory
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git-
 node_modules
+#not used but just in cast
+bower_components
 
 .idea
 .npm
