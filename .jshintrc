@@ -7,9 +7,10 @@
   "eqeqeq": true,
   "immed": true,
   "indent": 2,
-  "latedef": true,
+  "latedef": "nofunc",
   "newcap": true,
   "noarg": true,
+  "esversion": 6,
   "quotmark": "single",
   "regexp": true,
   "undef": true,
@@ -17,5 +18,10 @@
   "strict": true,
   "trailing": true,
   "smarttabs": true,
-  "white": true
+  "white": true,
+  "browser": true,
+  "globals": {
+    "describe": true,
+    "it": true
+  }
 }

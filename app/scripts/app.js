@@ -1,18 +1,10 @@
 
 var React = window.React = require('react'),
     ReactDOM = require("react-dom"),
-    TestCrap = require("./ui/TestCrap"),
+    TestCrap = require("./chat-window/ChatMessages"),
     mountNode = document.getElementById("app");
 
-var TodoList = React.createClass({
-  render: function() {
-    var createItem = function(itemText, itemIdx) {
-      return <li key={'todoList'+itemIdx}>{itemText}</li>;
-    };
-    return <ul>{this.props.items.map(createItem)}</ul>;
-  }
-});
-var TodoApp = React.createClass({
+var ChatWindow = React.createClass({
   getInitialState: function() {
     return {items: [], text: ''};
   },
@@ -27,19 +19,14 @@ var TodoApp = React.createClass({
   },
   render: function() {
     return (
-      <div>
-        <h3>TO DO</h3>
-        <TodoList items={this.state.items} />
-        <form onSubmit={this.handleSubmit}>
-          <input onChange={this.onChange} value={this.state.text} />
-          <button>{'Add #' + (this.state.items.length + 1)}</button>
-        </form>
-        <TestCrap />
-      </div>
+        <div>
+            {/*<ChatMessages />*/}
+            {/*<UserList />*/}
+        </div>
     );
   }
 });
 
 
-ReactDOM.render(<TodoApp />, mountNode);
+ReactDOM.render(<ChatWindow />, mountNode);
 
