@@ -1,7 +1,6 @@
 import { expect } from 'chai';
-import { describe, it, before } from 'mocha';
+import { describe, it, before, after } from 'mocha';
 import { stub } from 'sinon';
-import { mount, shallow } from 'enzyme';
 import actions from './chat-actions'
 import hasher from 'string-hash';
 
@@ -16,6 +15,10 @@ describe('redux chat actions', () => {
     dateNowStub.returns(dateNow);
 
     hash = hasher(text + dateNow);
+  });
+
+  after(() => {
+    Date.now.restore();
   });
 
   describe('sendMessage', () => {

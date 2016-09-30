@@ -1,14 +1,14 @@
 import { expect } from 'chai';
-import { describe, it, before } from 'mocha';
-import { spy } from 'sinon';
+import { describe, it, beforeEach } from 'mocha';
 import reducer from './state-pending-messages';
 import chatActions from './chat-actions';
 import Immutable from 'immutable';
 
 describe('redux pending messages reducer', () => {
   var state, action;
+
   describe('initializes', () => {
-    before(() => {
+    beforeEach(() => {
       state = undefined;
       action = {};
     });
@@ -24,7 +24,7 @@ describe('redux pending messages reducer', () => {
   });
 
   describe('send message', () => {
-    before(() => {
+    beforeEach(() => {
       state = new Immutable.List();
       action = chatActions.sendMessage('chat text');
     });
@@ -42,7 +42,7 @@ describe('redux pending messages reducer', () => {
 
   describe('new message', () => {
     var pendingMessageHash;
-    before(() => {
+    beforeEach(() => {
       var initialAction = chatActions.sendMessage('chat text');
       pendingMessageHash = initialAction.payload.hash;
       state = reducer(undefined, initialAction);

@@ -1,11 +1,11 @@
 'use strict';
 
 import React from 'react';
+import ChatBox from './ChatBox';
 
-var ChatMessages = React.createClass({
-  componentDidMount: () => {},
-  render: (props, state) => {
-    return <div>with stuff!</div>
+let ChatMessages = React.createClass({
+  render: () => {
+    return <ChatBox />;
   }
 });
 

@@ -1,6 +1,5 @@
 import { expect } from 'chai';
-import { describe, it, before } from 'mocha';
-import { spy } from 'sinon';
+import { describe, it, beforeEach } from 'mocha';
 import reducer from './state-messages';
 import chatActions from './chat-actions';
 import Immutable from 'immutable';
@@ -8,7 +7,7 @@ import Immutable from 'immutable';
 describe('redux messages reducer', () => {
   var state, action;
   describe('initializes', () => {
-    before(() => {
+    beforeEach(() => {
       state = undefined;
       action = {};
     });
@@ -24,7 +23,7 @@ describe('redux messages reducer', () => {
   });
 
   describe('new message', () => {
-    before(() => {
+    beforeEach(() => {
       state = new Immutable.List();
       action = chatActions.newMessage('chat text');
     });
