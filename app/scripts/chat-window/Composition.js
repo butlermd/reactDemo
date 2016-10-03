@@ -2,9 +2,11 @@
 
 import React from 'react';
 import store from '../store';
-import chatActions from '../chat/chat-actions'
+import chatActions from '../chat/chat-actions';
+import socketIdMixin from '../mixins/socket.io-mixin';
 
 let Composition = React.createClass({
+  mixins: [socketIdMixin],
   render: function () {
     return <form className="col-md-12" onSubmit={this.sendChat}>
       <textarea className="col-md-11" ref="chatText"></textarea>
@@ -12,7 +14,12 @@ let Composition = React.createClass({
     </form>;
   },
   sendChat: function () {
-    store.dispatch(chatActions.sendMessage(this.refs.chatText.value));
+    let messageAction = chatActions.sendMessage(this.refs.chatText.value);
+    store.dispatch(messageAction);
+    //this.socket.to('chat').emit(messageAction.payload)
+  },
+  componentDidMount: function () {
+    this.wsRoom = 'chat';
   }
 });
 

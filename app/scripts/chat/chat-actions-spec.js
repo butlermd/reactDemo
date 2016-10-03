@@ -50,5 +50,19 @@ describe('redux chat actions', () => {
 
       expect(actions.newMessage(text, user)).to.deep.equal(expectedAction);
     });
+
+    it('returns an action with a payload that is the same as the input if the input is an object', () => {
+      let inputMessage = {
+        text: 'text',
+        hash: 123,
+        user: 'user'
+      };
+      let expectedAction = {
+        type: "NEW_MESSAGE",
+        payload: inputMessage
+      };
+
+      expect(actions.newMessage(inputMessage)).to.deep.equal(expectedAction);
+    });
   });
 });

@@ -7,13 +7,24 @@ import { clone } from 'lodash';
 import Composition from './Composition'
 import hasher from 'string-hash';
 import store from '../store'
+import socketIdMixin from '../mixins/socket.io-mixin';
 
 describe('Composition', () => {
   var wrapper;
   const text = 'text of chat';
 
-  beforeEach(() => {
-    wrapper = mount(<Composition />);
+  before(() => {
+    stub(Composition.prototype, 'componentDidMount', function() {
+      console.log('stubbing')
+      this.socket = {
+        to: stub().returnsThis(),
+        emit: stub().returnsThis(),
+      }
+    });
+  });
+
+  after(() => {
+    Composition.prototype.componentDidMount.restore();
   });
 
   describe('sendChat handler', () => {
@@ -27,11 +38,6 @@ describe('Composition', () => {
       store.dispatch.restore();
     });
 
-    beforeEach(() => {
-      const textarea = wrapper.find('textarea').get(0);
-      textarea.value = text;
-    });
-
     it('send a SEND_MESSAGE action to the store', () => {
       let action = {
         type: 'SEND_MESSAGE',
@@ -42,6 +48,9 @@ describe('Composition', () => {
         }
       };
 
+      wrapper = mount(<Composition />);
+      const textarea = wrapper.find('textarea').get(0);
+      textarea.value = text;
       wrapper.find('form').simulate('submit');
 
       expect(store.dispatch.called).to.equal.true;

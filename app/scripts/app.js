@@ -1,32 +1,15 @@
+import React from 'react';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux'
+import { ChatWindow } from './chat-window/ChatWindow';
+import { UserList } from './user-panel/UserList';
+import store from './store';
 
-var React = window.React = require('react'),
-    ReactDOM = require("react-dom"),
-    TestCrap = require("./chat-window/ChatMessages"),
-    mountNode = document.getElementById("app");
-
-var ChatWindow = React.createClass({
-  getInitialState: function() {
-    return {items: [], text: ''};
-  },
-  onChange: function(e) {
-    this.setState({text: e.target.value});
-  },
-  handleSubmit: function(e) {
-    e.preventDefault();
-    var nextItems = this.state.items.concat([this.state.text]);
-    var nextText = '';
-    this.setState({items: nextItems, text: nextText});
-  },
-  render: function() {
-    return (
-        <div>
-            {/*<ChatMessages />*/}
-            {/*<UserList />*/}
-        </div>
-    );
-  }
-});
-
-
-ReactDOM.render(<ChatWindow />, mountNode);
+render(
+  <Provider store={store}>
+    <ChatWindow />
+    <UserList />
+  </Provider>,
+  document.getElementById('app')
+);
 

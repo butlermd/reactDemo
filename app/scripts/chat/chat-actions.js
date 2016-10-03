@@ -1,4 +1,5 @@
 import hasher from 'string-hash';
+import { isObject } from 'lodash';
 
 const SEND_MESSAGE = 'SEND_MESSAGE';
 const NEW_MESSAGE = 'NEW_MESSAGE';
@@ -26,11 +27,19 @@ function createSendMessageAction(text) {
 }
 
 function createNewMessageAction(text, user) {
-  return messageAction(NEW_MESSAGE, text, user);
+  let hash;
+
+  if (isObject(text)) {
+    user = text.user;
+    hash = text.hash;
+    text = text.text;
+  }
+
+  return messageAction(NEW_MESSAGE, text, user, hash);
 }
 
-function messageAction(type, text, user) {
-  var hash = hasher(text + Date.now());
+function messageAction(type, text, user, hash) {
+  hash = hash || hasher(text + Date.now());
 
   return {
     type: type,
