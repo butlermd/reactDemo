@@ -80,7 +80,6 @@ describe('Connect(ChatBox)', () => {
   before(() => {
     socket = {
       on: stub().returnsThis(),
-      join: stub().returnsThis(),
       disconnect: stub().returnsThis()
     };
 
@@ -109,7 +108,7 @@ describe('Connect(ChatBox)', () => {
       mount(<ChatMessages store={store}/>);
 
       expect(io.connect.calledOnce).to.be.true;
-      expect(io.connect.args[0]).to.deep.equal(['localhost:3000/ws']);
+      expect(io.connect.args[0]).to.deep.equal(['localhost:3001']);
     });
 
     it('assigns the socket created by connect() to this.socket', () => {
@@ -118,31 +117,19 @@ describe('Connect(ChatBox)', () => {
       expect(chatBox.socket).to.equal(socket);
     });
 
-    it('joins the "chat" room on connection', () => {
-      mount(<ChatMessages store={store}/>);
-      let event = socket.on.args[0][0];
-      let callback = socket.on.args[0][1];
-
-      callback(socket);
-
-      expect(event).to.equal('connection');
-      expect(socket.join.calledOnce).to.be.true;
-      expect(socket.join.args[0]).to.deep.equal(['chat']);
-    });
-
     it('dispatches a NEW_MESSAGE action to the store when one is received from the socket', () => {
       let message = { text: 'new message', user: 'other user', hash: 123 };
       store.dispatch.reset();
 
       mount(<ChatMessages store={store}/>);
 
-      let onMessage = socket.on.args[1];
+      let onMessage = socket.on.args[0];
       let event = onMessage[0];
       let callback = onMessage[1];
 
       callback(message);
 
-      expect(event).to.equal('message');
+      expect(event).to.equal('chatMessage');
       expect(store.dispatch.calledOnce);
       expect(store.dispatch.args[0]).to.deep.equal([{type: 'NEW_MESSAGE', payload: message}]);
     });

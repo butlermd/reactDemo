@@ -29,7 +29,7 @@ var reload = browserSync.reload;
 var mocha = require('gulp-mocha');
 var chai = require('chai');
 
-var app = require('express')();
+var express = require('express');
 var httpLib = require('http');
 var socketIo = require('socket.io');
 
@@ -206,7 +206,7 @@ gulp.task('extras', function () {
 });
 
 // Watch
-gulp.task('watch', ['html', 'fonts', 'bundle'], function () {
+gulp.task('watch', ['html', 'fonts', 'bundle', 'server'], function () {
 
   browserSync({
     notify: false,
@@ -216,20 +216,10 @@ gulp.task('watch', ['html', 'fonts', 'bundle'], function () {
     //       will present a certificate warning in the browser.
     // https: true,
     server: ['dist', 'app'],
-    proxy: {
-      target: 'http://www.localhost:3001',
-      ws: true,
-      middleware: [
-        function isApi(req, res, next) {
-          let index;
-          if ((index = req.url.indexOf('/api')) >= 0) {
-            req.url = 'http://www.localhost:3001/' + req.url.substr(index + 4);
-          }
-
-          next();
-        }
-      ]
-    }
+    //proxy: {
+    //  target: 'http://www.localhost:3001',
+    //  ws: true
+    //}
   });
 
   // Watch .json files
@@ -256,21 +246,35 @@ gulp.task('build', ['html', 'buildBundle', 'images', 'fonts', 'extras'], functio
 gulp.task('default', ['clean', 'build']);
 
 gulp.task('server', function () {
+  var app = express();
   var http = httpLib.Server(app);
   var io = socketIo(http);
 
   var users = [];
 
+  app.use(express.static('dist'));
+
   app.get('/users', function (req, res) {
     res.status(200).send(users);
   });
 
-  io.on('connection', function(socket) {
-    socket.in('chat').on('message', function(payload) {
-      io.to('chat').emit(payload);
-    });
+  app.post('/users', function (req, res) {
+    res.status(201).send(users);
   });
 
-  http.listen(3001, function () {});
+  io.on('connection', function(socket) {
+    console.log('connection made')
+    socket.on('sendMessage', function(payload) {
+      io.emit('chatMessage', payload);
+    });
+
+    socket.on('disconnect', function() {
+
+    })
+  });
+
+  http.listen(3001, function () {
+    console.log('express starting on 3001');
+  });
 
 });

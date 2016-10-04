@@ -12,7 +12,6 @@ describe('socket-io mixin', () => {
   before(() => {
     socket = {
       on: stub().returnsThis(),
-      join: stub().returnsThis(),
       disconnect: stub().returnsThis()
     };
 
@@ -22,7 +21,6 @@ describe('socket-io mixin', () => {
 
   beforeEach(() => {
     socket.on.reset();
-    socket.join.reset();
   });
 
   after(() => {
@@ -34,7 +32,7 @@ describe('socket-io mixin', () => {
       mixin.componentDidMount();
 
       expect(io.connect.calledOnce).to.be.true;
-      expect(io.connect.args[0]).to.deep.equal(['localhost:3000/ws']);
+      expect(io.connect.args[0]).to.deep.equal(['localhost:3001']);
     });
 
     it('assigns the socket created by connect() to this.socket', () => {
@@ -42,35 +40,6 @@ describe('socket-io mixin', () => {
 
       expect(mixin.socket).to.equal(socket);
     });
-
-    it('joins the room specified by the array this.wsRoom on connection', () => {
-      mixin.wsRoom = 'testRoom';
-
-      mixin.componentDidMount();
-      let event = socket.on.args[0][0];
-      let callback = socket.on.args[0][1];
-
-      callback(socket);
-
-      expect(event).to.equal('connection');
-      expect(socket.join.calledOnce).to.be.true;
-      expect(socket.join.args[0]).to.deep.equal(['testRoom']);
-    });
-
-    it('joins the rooms specified by the array this.wsRoom on connection', () => {
-      mixin.wsRoom = ['testRoom1', 'testRoom2', 'testRoom3'];
-
-      mixin.componentDidMount();
-      let event = socket.on.args[0][0];
-      let callback = socket.on.args[0][1];
-
-      callback(socket);
-
-      expect(event).to.equal('connection');
-      expect(socket.join.calledThrice).to.be.true;
-      expect(socket.join.args).to.deep.equal([['testRoom1'], ['testRoom2'], ['testRoom3']]);
-    });
-
   });
 
   describe('componentWillUnmount()', () => {

@@ -5,7 +5,6 @@ import messages from './chat/state-messages';
 import pendingMessages from './chat/state-pending-messages';
 import users from './users/state-users';
 import currentUser from './users/state-current-user';
-import io from 'socket.io';
 
 const store = createStore(combineReducers({
   messages: messages,

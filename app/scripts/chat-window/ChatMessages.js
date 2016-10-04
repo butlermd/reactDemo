@@ -11,7 +11,7 @@ import socketIoMixin from '../mixins/socket.io-mixin';
 const ChatBox = React.createClass({
   render: function () {
     let messages = map(this.props.messages, messageToChatMessage);
-    return <div className="col-md-12">{messages}</div>
+    return <div className="col-md-12 text-left">{messages}</div>
   },
   propTypes: {
     messages: (props, propName) => List.isList(props[propName])
@@ -21,16 +21,22 @@ const ChatBox = React.createClass({
 export { ChatBox };
 
 const ChatMessages = connect(mapStateToProps)(ChatBox);
+const superComponentDidMount = ChatMessages.prototype.componentDidMount;
 ChatMessages.prototype.componentDidMount = function () {
-  this.wsRoom = 'chat';
-
   socketIoMixin.componentDidMount.call(this);
+  superComponentDidMount.call(this);
 
-  this.socket.on('message', (message) => {
-    this.props.store.dispatch(chatActions.newMessage(message));
+  this.socket.on('chatMessage', (message) => {
+    console.log('Chat Message Received:');
+    console.log(message);
+    this.store.dispatch(chatActions.newMessage(message));
   });
 };
-ChatMessages.prototype.componentWillUnmount = socketIoMixin.componentWillUnmount;
+const superComponentWillUnmount = ChatMessages.prototype.componentWillUnmount;
+ChatMessages.prototype.componentWillUnmount = function() {
+  superComponentWillUnmount.call(this);
+  socketIoMixin.componentWillUnmount.call(this);
+};
 
 export default ChatMessages;
 

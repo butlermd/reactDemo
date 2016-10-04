@@ -8,18 +8,22 @@ import socketIdMixin from '../mixins/socket.io-mixin';
 let Composition = React.createClass({
   mixins: [socketIdMixin],
   render: function () {
-    return <form className="col-md-12" onSubmit={this.sendChat}>
-      <textarea className="col-md-11" ref="chatText"></textarea>
-      <button className="col-md-1" type="submit"></button>
-    </form>;
+    return <div className="col-md-12">
+      <input className="col-md-10" ref="chatText" onKeyPress={this.onKeyPress}></input>
+      <button className="col-md-2 btn-primary btn-sm" onClick={this.sendChat}>Send Chat</button>
+    </div>;
+  },
+  onKeyPress: function (e) {
+    if(e.which === 13) {
+      return this.sendChat();
+    }
   },
   sendChat: function () {
     let messageAction = chatActions.sendMessage(this.refs.chatText.value);
     store.dispatch(messageAction);
-    //this.socket.to('chat').emit(messageAction.payload)
-  },
-  componentDidMount: function () {
-    this.wsRoom = 'chat';
+    this.socket.emit('sendMessage', messageAction.payload);
+
+    this.refs.chatText.value = '';
   }
 });
 
