@@ -6,13 +6,15 @@ import { map } from 'lodash';
 import ChatMessage from './ChatMessage';
 import chatActions from '../chat/chat-actions';
 import { connect } from 'react-redux';
-import socketIoMixin from '../mixins/socket.io-mixin';
+import appSocket from '../sockets/appSocket';
 
 const ChatBox = React.createClass({
   render: function () {
     let messages = map(this.props.messages, messageToChatMessage);
-    let pendingMessages= map(this.props.pendingMessages, messageToPendingChatMessage);
-    return <div className="col-md-12 text-left">{messages}{pendingMessages}</div>
+    let pendingMessages = map(this.props.pendingMessages, messageToPendingChatMessage);
+    return <div className="panel panel-default col-md-12 text-left">
+      <div className="panel-body">{messages}{pendingMessages}</div>
+    </div>
   },
   propTypes: {
     messages: (props, propName) => List.isList(props[propName]),
@@ -25,8 +27,9 @@ export { ChatBox };
 const ChatMessages = connect(mapStateToProps)(ChatBox);
 const superComponentDidMount = ChatMessages.prototype.componentDidMount;
 ChatMessages.prototype.componentDidMount = function () {
-  socketIoMixin.componentDidMount.call(this);
   superComponentDidMount.call(this);
+
+  this.socket = appSocket();
 
   this.socket.on('chatMessage', (message) => {
     console.log('Chat Message Received:');
@@ -35,10 +38,6 @@ ChatMessages.prototype.componentDidMount = function () {
   });
 };
 const superComponentWillUnmount = ChatMessages.prototype.componentWillUnmount;
-ChatMessages.prototype.componentWillUnmount = function() {
-  superComponentWillUnmount.call(this);
-  socketIoMixin.componentWillUnmount.call(this);
-};
 
 export default ChatMessages;
 

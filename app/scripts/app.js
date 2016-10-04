@@ -5,7 +5,7 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux'
 import ChatWindow from './chat-window/ChatWindow';
 import Login from './users-ui/Login';
-//import { UserList } from './user-panel/UserList';
+import UserListContainer from './users-ui/UserList';
 import store from './store';
 
 let currentUser;
@@ -22,8 +22,10 @@ const doRender = () => {
   let jsx;
   if (currentUser) {
     jsx = <Provider store={store}>
-      <ChatWindow />
-      {/*<UserList />*/}
+      <div className="row">
+        <ChatWindow />
+        <UserListContainer className="col-md-3" />
+      </div>
     </Provider>
   } else {
     jsx = <Provider store={store}>

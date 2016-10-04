@@ -1,12 +1,10 @@
 'use strict';
 
 import React from 'react';
-import store from '../store';
-import userActions from '../users/user-actions';
-import socketIdMixin from '../mixins/socket.io-mixin';
+import loginMixin from './login-mixin';
 
 let Login = React.createClass({
-  mixins: [socketIdMixin],
+  mixins: [loginMixin],
   render: function () {
     return <div className="col-md-12">
       <input className="col-md-4 col-md-offset-3" ref="userInput" onKeyPress={this.onKeyPress}></input>
@@ -17,11 +15,6 @@ let Login = React.createClass({
     if(e.which === 13) {
       this.login();
     }
-  },
-  login: function () {
-    let messageAction = userActions.userLogin(this.refs.userInput.value, true);
-    store.dispatch(messageAction);
-    this.socket.emit('login', messageAction.payload);
   }
 });
 

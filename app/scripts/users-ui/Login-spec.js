@@ -5,22 +5,28 @@ import { expect } from 'chai';
 import { mount } from 'enzyme';
 import Login from './Login'
 import store from '../store';
+import io from 'socket.io-client';
+import {reset} from '../sockets/appSocket';
 
 describe('Login', () => {
   var wrapper, socket;
   const user = 'userName';
 
   beforeEach(() => {
-    stub(Login.prototype, 'componentDidMount', function () {
-      this.socket = socket = {
-        to: stub().returnsThis(),
-        emit: stub().returnsThis(),
-      }
-    });
+    socket = {
+      on: stub().returnsThis(),
+      emit: stub().returnsThis(),
+      disconnect: stub().returnsThis()
+    };
+
+    stub(io, 'connect').returns(socket);
+
+    reset();
   });
 
   afterEach(() => {
-    Login.prototype.componentDidMount.restore();
+    io.connect.restore();
+    reset();
   });
 
   describe('login handler', () => {

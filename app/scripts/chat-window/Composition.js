@@ -2,11 +2,13 @@
 
 import React from 'react';
 import chatActions from '../chat/chat-actions';
-import socketIdMixin from '../mixins/socket.io-mixin';
+import appSocket from '../sockets/appSocket';
 import store from '../store';
 
 let Composition = React.createClass({
-  mixins: [socketIdMixin],
+  componentDidMount: function() {
+    this.socket = appSocket();
+  },
   render: function () {
     return <div className="col-md-12">
       <input className="col-md-10" ref="chatText" onKeyPress={this.onKeyPress}></input>

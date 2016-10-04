@@ -39,7 +39,8 @@ describe('users state reducer', () => {
       expect(list.last()).to.equal('newUser3');
     });
 
-    it('adds all users from the user list received action', () => {
+    it('replaces the state when a user list is received', () => {
+      state = reducer(state, userActions.userLogin('newUser0'));
       var userList = ['newUser1', 'newUser2', 'newUser3'];
       var list = reducer(state, userActions.userList(userList));
 

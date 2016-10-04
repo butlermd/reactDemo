@@ -18,7 +18,7 @@ const handlers = {
 /////
 
 function login(state, action) {
-  return state.push(action.payload.user);
+  return action.payload.local ? state : state.push(action.payload.user);
 }
 
 function logout(state, action) {
@@ -28,5 +28,5 @@ function logout(state, action) {
 }
 
 function addAllUsers(state, action) {
-  return Array.isArray(action.payload) ? state.push(...action.payload) : state;
+  return Array.isArray(action.payload) ? new List(action.payload) : state;
 }

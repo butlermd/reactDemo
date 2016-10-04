@@ -273,7 +273,7 @@ gulp.task('server', function () {
     });
 
     socket.on('login', function(username) {
-      let user = {username: username};
+      let user = {username: username.user};
       users.push(user);
 
       socket.on('disconnect', function() {
@@ -302,7 +302,7 @@ gulp.task('server', function () {
       return user.username;
     });
 
-    io.emit('users', userList);
+    io.emit('userList', userList);
   }
 
 });

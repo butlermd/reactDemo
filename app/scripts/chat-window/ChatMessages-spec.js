@@ -21,10 +21,11 @@ describe('ChatBox', () => {
       ];
 
       const wrapper = shallow(<ChatBox messages={messages}/>);
+      const panelBody = wrapper.find('.panel-body');
 
-      expect(wrapper.children().length).to.equal(1);
-      expect(wrapper.childAt(0).name()).to.equal('ChatMessage');
-      expect(wrapper.childAt(0).prop('message')).to.equal(messages[0]);
+      expect(panelBody.children().length).to.equal(1);
+      expect(panelBody.childAt(0).name()).to.equal('ChatMessage');
+      expect(panelBody.childAt(0).prop('message')).to.equal(messages[0]);
     });
 
     it('adds many messages as children', () => {
@@ -52,7 +53,8 @@ describe('ChatBox', () => {
       ];
 
       const wrapper = shallow(<ChatBox messages={messages}/>);
-      const children = wrapper.children();
+      const panelBody = wrapper.find('.panel-body');
+      const children = panelBody.children();
 
       let allChatMessages = every(children.nodes, (message) => {
         return message.type.name === 'ChatMessage';
@@ -104,43 +106,20 @@ describe('Connect(ChatBox)', () => {
     io.connect.restore();
   });
 
-  describe('componentDidMount()', () => {
-    it('calls io.connect when mounting', () => {
-      mount(<ChatMessages store={store}/>);
+  it('dispatches a NEW_MESSAGE action to the store when one is received from the socket', () => {
+    let message = { text: 'new message', user: 'other user', hash: 123 };
+    store.dispatch.reset();
 
-      expect(io.connect.calledOnce).to.be.true;
-      expect(io.connect.args[0]).to.deep.equal(['localhost:3001']);
-    });
+    mount(<ChatMessages store={store}/>);
 
-    it('assigns the socket created by connect() to this.socket', () => {
-      const chatBox = mount(<ChatMessages store={store}/>).node;
+    let onMessage = socket.on.args[0];
+    let event = onMessage[0];
+    let callback = onMessage[1];
 
-      expect(chatBox.socket).to.equal(socket);
-    });
+    callback(message);
 
-    it('dispatches a NEW_MESSAGE action to the store when one is received from the socket', () => {
-      let message = { text: 'new message', user: 'other user', hash: 123 };
-      store.dispatch.reset();
-
-      mount(<ChatMessages store={store}/>);
-
-      let onMessage = socket.on.args[0];
-      let event = onMessage[0];
-      let callback = onMessage[1];
-
-      callback(message);
-
-      expect(event).to.equal('chatMessage');
-      expect(store.dispatch.calledOnce);
-      expect(store.dispatch.args[0]).to.deep.equal([{type: 'NEW_MESSAGE', payload: message}]);
-    });
-  });
-
-  describe('componentWillUnmount()', () => {
-    it('disconnects the socket on unmount', () => {
-      mount(<ChatMessages store={store}/>).unmount();
-
-      expect(socket.disconnect.calledOnce).to.be.true;
-    });
+    expect(event).to.equal('chatMessage');
+    expect(store.dispatch.calledOnce);
+    expect(store.dispatch.args[0]).to.deep.equal([{ type: 'NEW_MESSAGE', payload: message }]);
   });
 });
