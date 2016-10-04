@@ -86,7 +86,8 @@ describe('Connect(ChatBox)', () => {
     stub(io, 'connect').returns(socket);
 
     let state = {
-      messages: new List()
+      messages: new List(),
+      pendingMessages: new List(),
     };
     store = {
       subscribe: spy(),

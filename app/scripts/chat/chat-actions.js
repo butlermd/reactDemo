@@ -14,7 +14,6 @@ const actions = {
   newMessage: createNewMessageAction
 };
 
-var currentUser = 'currentUser';
 
 export default actions;
 
@@ -22,8 +21,8 @@ export { actionTypes };
 
 ////////
 
-function createSendMessageAction(text) {
-  return messageAction(SEND_MESSAGE, text, currentUser);
+function createSendMessageAction(text, user) {
+  return messageAction(SEND_MESSAGE, text, user);
 }
 
 function createNewMessageAction(text, user) {

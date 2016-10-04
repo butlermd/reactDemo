@@ -2,9 +2,10 @@
 
 import React from 'react';
 
-const ChatMessage = (props) =>
-  <div className="col-md-12">
+const ChatMessage = (props) => {
+  return <div className="col-md-12" style={props.pending ? {'font-style':'italic', color: '#bbbbbb'}: {}}>
     <strong>{props.message.user}: </strong> {props.message.text}
-  </div>;
+  </div>
+};
 
 export default ChatMessage;

@@ -11,10 +11,12 @@ import socketIoMixin from '../mixins/socket.io-mixin';
 const ChatBox = React.createClass({
   render: function () {
     let messages = map(this.props.messages, messageToChatMessage);
-    return <div className="col-md-12 text-left">{messages}</div>
+    let pendingMessages= map(this.props.pendingMessages, messageToPendingChatMessage);
+    return <div className="col-md-12 text-left">{messages}{pendingMessages}</div>
   },
   propTypes: {
-    messages: (props, propName) => List.isList(props[propName])
+    messages: (props, propName) => List.isList(props[propName]),
+    pendingMessages: (props, propName) => List.isList(props[propName])
   }
 });
 
@@ -46,8 +48,13 @@ function messageToChatMessage(message) {
   return <ChatMessage message={message} key={message.hash}/>;
 }
 
+function messageToPendingChatMessage(message) {
+  return <ChatMessage message={message} key={message.hash} pending="true"/>;
+}
+
 function mapStateToProps(state) {
   return {
-    messages: state.messages.toArray()
+    messages: state.messages.toArray(),
+    pendingMessages: state.pendingMessages.toArray(),
   };
 }

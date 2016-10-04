@@ -26,7 +26,7 @@ describe('redux pending messages reducer', () => {
   describe('send message', () => {
     beforeEach(() => {
       state = new Immutable.List();
-      action = chatActions.sendMessage('chat text');
+      action = chatActions.sendMessage('chat text', 'currentUser');
     });
 
     it('adds the new message to the state', () => {
@@ -43,7 +43,7 @@ describe('redux pending messages reducer', () => {
   describe('new message', () => {
     var pendingMessageHash;
     beforeEach(() => {
-      var initialAction = chatActions.sendMessage('chat text');
+      var initialAction = chatActions.sendMessage('chat text', 'currentUser');
       pendingMessageHash = initialAction.payload.hash;
       state = reducer(undefined, initialAction);
 

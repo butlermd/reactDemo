@@ -32,7 +32,7 @@ describe('redux chat actions', () => {
         }
       };
 
-      expect(actions.sendMessage(text)).to.deep.equal(expectedAction);
+      expect(actions.sendMessage(text, 'currentUser')).to.deep.equal(expectedAction);
     });
   });
 

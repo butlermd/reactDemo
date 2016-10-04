@@ -265,16 +265,44 @@ gulp.task('server', function () {
   io.on('connection', function(socket) {
     console.log('connection made')
     socket.on('sendMessage', function(payload) {
-      io.emit('chatMessage', payload);
+      if(payload.text.indexOf('wait') >=0) {
+        setTimeout(sendMessage(payload), 1000);
+      } else {
+        sendMessage(payload)();
+      }
     });
 
-    socket.on('disconnect', function() {
+    socket.on('login', function(username) {
+      let user = {username: username};
+      users.push(user);
 
-    })
+      socket.on('disconnect', function() {
+        let index = users.indexOf(user);
+        users.splice(index, 1);
+
+        sendUsers();
+      });
+
+      sendUsers();
+    });
   });
 
   http.listen(3001, function () {
     console.log('express starting on 3001');
   });
+
+  function sendMessage(payload) {
+    return function() {
+      io.emit('chatMessage', payload);
+    };
+  }
+
+  function sendUsers() {
+    let userList = users.map(function(user) {
+      return user.username;
+    });
+
+    io.emit('users', userList);
+  }
 
 });

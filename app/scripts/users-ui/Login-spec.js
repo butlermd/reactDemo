@@ -3,33 +3,27 @@ import { describe, beforeEach, it, afterEach } from 'mocha';
 import { stub, spy } from 'sinon';
 import { expect } from 'chai';
 import { mount } from 'enzyme';
-import { clone } from 'lodash';
-import Composition from './Composition'
-import hasher from 'string-hash';
+import Login from './Login'
 import store from '../store';
 
-describe('Composition', () => {
+describe('Login', () => {
   var wrapper, socket;
-  const text = 'text of chat';
+  const user = 'userName';
 
   beforeEach(() => {
-    stub(Composition.prototype, 'componentDidMount', function () {
+    stub(Login.prototype, 'componentDidMount', function () {
       this.socket = socket = {
         to: stub().returnsThis(),
         emit: stub().returnsThis(),
       }
     });
-
-    stub(store, 'getState').returns({currentUser: 'currentUser'});
   });
 
   afterEach(() => {
-    Composition.prototype.componentDidMount.restore();
-
-    store.getState.restore();
+    Login.prototype.componentDidMount.restore();
   });
 
-  describe('sendChat handler', () => {
+  describe('login handler', () => {
     beforeEach(() => {
       stub(Date, 'now').returns(123);
       stub(store, 'dispatch');
@@ -42,17 +36,16 @@ describe('Composition', () => {
 
     it('send a SEND_MESSAGE action to the store', () => {
       let action = {
-        type: 'SEND_MESSAGE',
+        type: 'USER_LOGGED_IN',
         payload: {
-          text: text,
-          hash: hasher(text + 123),
-          user: 'currentUser'
+          user: user,
+          local: true
         }
       };
 
-      wrapper = mount(<Composition />);
+      wrapper = mount(<Login />);
       const input = wrapper.find('input').get(0);
-      input.value = text;
+      input.value = user;
       wrapper.find('button').simulate('click');
 
       expect(store.dispatch.called).to.equal.true;
@@ -62,27 +55,17 @@ describe('Composition', () => {
 
     it('sends the message over websocket too', () => {
       let payload = {
-        text: text,
-        hash: hasher(text + 123),
-        user: 'currentUser'
+        user: user,
+        local: true
       };
 
-      wrapper = mount(<Composition />);
+      wrapper = mount(<Login />);
       const input = wrapper.find('input').get(0);
-      input.value = text;
+      input.value = user;
       wrapper.find('button').simulate('click');
 
       expect(socket.emit.calledOnce).to.equal.true;
-      expect(socket.emit.args[0]).to.deep.equal(['sendMessage', payload]);
-    });
-
-    it('clears the input afterwards', () => {
-      wrapper = mount(<Composition />);
-      const input = wrapper.find('input').get(0);
-      input.value = text;
-      wrapper.find('button').simulate('click');
-
-      expect(input.value).to.equal('');
+      expect(socket.emit.args[0]).to.deep.equal(['login', payload]);
     });
   });
 
@@ -99,17 +82,16 @@ describe('Composition', () => {
 
     it('send a SEND_MESSAGE action to the store', () => {
       let action = {
-        type: 'SEND_MESSAGE',
+        type: 'USER_LOGGED_IN',
         payload: {
-          text: text,
-          hash: hasher(text + 123),
-          user: 'currentUser'
+          user: user,
+          local: true
         }
       };
 
-      wrapper = mount(<Composition />);
+      wrapper = mount(<Login />);
       const input = wrapper.find('input').get(0);
-      input.value = text;
+      input.value = user;
       wrapper.find('input').simulate('keyPress', { which: 13 });
 
       expect(store.dispatch.called).to.equal.true;
@@ -119,27 +101,17 @@ describe('Composition', () => {
 
     it('sends the message over websocket too', () => {
       let payload = {
-        text: text,
-        hash: hasher(text + 123),
-        user: 'currentUser'
+        user: user,
+        local: true
       };
 
-      wrapper = mount(<Composition />);
+      wrapper = mount(<Login />);
       const input = wrapper.find('input').get(0);
-      input.value = text;
+      input.value = user;
       wrapper.find('input').simulate('keyPress', { which: 13 });
 
       expect(socket.emit.calledOnce).to.equal.true;
-      expect(socket.emit.args[0]).to.deep.equal(['sendMessage' ,payload]);
-    });
-
-    it('clears the input afterwards', () => {
-      wrapper = mount(<Composition />);
-      const input = wrapper.find('input').get(0);
-      input.value = text;
-      wrapper.find('input').simulate('keyPress', { which: 13 });
-
-      expect(input.value).to.equal('');
+      expect(socket.emit.args[0]).to.deep.equal(['login' ,payload]);
     });
   });
 });

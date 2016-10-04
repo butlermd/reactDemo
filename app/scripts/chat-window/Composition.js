@@ -1,9 +1,9 @@
 'use strict';
 
 import React from 'react';
-import store from '../store';
 import chatActions from '../chat/chat-actions';
 import socketIdMixin from '../mixins/socket.io-mixin';
+import store from '../store';
 
 let Composition = React.createClass({
   mixins: [socketIdMixin],
@@ -19,7 +19,8 @@ let Composition = React.createClass({
     }
   },
   sendChat: function () {
-    let messageAction = chatActions.sendMessage(this.refs.chatText.value);
+    let username = store.getState().currentUser;
+    let messageAction = chatActions.sendMessage(this.refs.chatText.value, username);
     store.dispatch(messageAction);
     this.socket.emit('sendMessage', messageAction.payload);
 
