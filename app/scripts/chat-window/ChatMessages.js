@@ -37,7 +37,6 @@ ChatMessages.prototype.componentDidMount = function () {
     this.store.dispatch(chatActions.newMessage(message));
   });
 };
-const superComponentWillUnmount = ChatMessages.prototype.componentWillUnmount;
 
 export default ChatMessages;
 
