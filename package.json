@@ -1,6 +1,6 @@
 {
   "name": "reactdemo",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "dependencies": {
     "bufferutil": "^1.2.1",
     "immutable": "^3.8.1",
