@@ -28,6 +28,9 @@ var reload = browserSync.reload;
 
 var mocha = require('gulp-mocha');
 var chai = require('chai');
+var jest = require('gulp-jest').default;
+//must select the "default" export of the module because it was transpiled with babel 6.
+//http://stackoverflow.com/questions/33704714/cant-require-default-export-value-in-babel-6-x#answer-33705077
 
 var express = require('express');
 var httpLib = require('http');
@@ -120,6 +123,19 @@ gulp.task('test', function () {
         shallow: enzyme.shallow
       }
     }))
+});
+
+gulp.task('jest', function() {
+  return gulp.src(['app/scripts']).pipe(jest({
+    config: {
+      preprocessorIgnorePatterns: [
+        '<rootDir>/dist/',
+        '<rootDir>/node_modules/'
+      ],
+      testRegex: '\\.(test|spec))\\.jsx?$',
+
+    }
+  }));
 });
 
 // HTML

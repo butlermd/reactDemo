@@ -1,0 +1,30 @@
+exports[`ChatMessage contains the text 1`] = `
+<div
+  className="col-md-12"
+  style={
+    Object {
+      "color": "#bbbbbb",
+      "font-style": "italic",
+    }
+  }>
+  <strong>
+    username
+    : 
+  </strong>
+   
+  chat text
+</div>
+`;
+
+exports[`ChatMessage when the message is not pending 1`] = `
+<div
+  className="col-md-12"
+  style={Object {}}>
+  <strong>
+    username
+    : 
+  </strong>
+   
+  chat text
+</div>
+`;
