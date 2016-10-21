@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites>
+ <testsuite name="Login page" timestamp="2016-10-20T14:24:38" hostname="localhost" time="4.865" errors="0" tests="1" skipped="0" disabled="0" failures="0">
+  <testcase classname="Login page" name="displays React chat in both pages" time="0.113" />
+ </testsuite>
+ <testsuite name="Login page.chat session test" timestamp="2016-10-20T14:24:41" hostname="localhost" time="1.241" errors="0" tests="2" skipped="0" disabled="0" failures="0">
+  <testcase classname="Login page.chat session test" name="message sent in chat1 displayed in chat2 session" time="0.435" />
+  <testcase classname="Login page.chat session test" name="message sent in chat2 displayed in chat1 session" time="0.382" />
+ </testsuite>
+</testsuites>
