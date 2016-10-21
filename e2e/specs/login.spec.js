@@ -18,6 +18,18 @@ describe( 'Login page', function() {
         expect(newBrowser.element(by.css('.header')).getText() ).toBe('React Chat');
     });
 
+    it('displays Disclaimer in both pages at footer', function() {
+        expect(browser.element(by.css('.footer')).getText() ).toBe('Demo app for React assessment');
+        expect(newBrowser.element(by.css('.footer')).getText() ).toBe('Demo app for React assessment');
+    });
+
+    it('displays background color of login button in blue', function() {
+        expect(browser.element(by.buttonText('Login') ).getCssValue('background-color'))
+            .toBe('rgba(51, 122, 183, 1)');
+        expect(newBrowser.element(by.buttonText('Login') ).getCssValue('background-color'))
+            .toBe('rgba(51, 122, 183, 1)');
+    });
+
     describe('chat session test', function() {
         beforeAll( function() {
             browser.element(by.css('.col-md-4.col-md-offset-3') ).sendKeys('man');
@@ -29,7 +41,7 @@ describe( 'Login page', function() {
         it('message sent in chat1 displayed in chat2 session', function() {
             browser.element(by.css('.col-md-10' )).sendKeys('Hi how are you?');
             browser.element(by.css('.col-md-2.btn-primary.btn-sm') ).click();
-            expect( newBrowser.element(by.css('.col-md-12')).getText() ).toBe('man: Hi how are you?');
+            expect( newBrowser.element(by.css('.col-md-12')).getText() ).toContain('man: Hi how are you?');
         });
 
         it('message sent in chat2 displayed in chat1 session', function() {
